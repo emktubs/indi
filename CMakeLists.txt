@@ -1271,9 +1271,25 @@ IF (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         ENABLE_UNITY_BUILD(v4l2driverccd v4l2driverccd_SRC 10 cpp)
     ENDIF ()
 
+    add_library(indiv4l SHARED ${v4l2driverccd_SRC})
+    set_target_properties(indiv4l PROPERTIES VERSION ${CMAKE_INDI_VERSION_STRING} SOVERSION ${INDI_SOVERSION} OUTPUT_NAME indiv4l)
     add_executable(indi_v4l2_ccd ${v4l2driverccd_SRC} ${libwebcam_C_SRC} ${libwebcam_CXX_SRC})
     target_link_libraries(indi_v4l2_ccd ${JPEG_LIBRARY} indidriver)
     install(TARGETS indi_v4l2_ccd RUNTIME DESTINATION bin )
+
+    install(TARGETS indiv4l LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+    install(FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/drivers/video/v4l2driver.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/lx/Lx.h
+        DESTINATION ${INCLUDE_INSTALL_DIR}/libindi COMPONENT Devel)
+
+    install(FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/webcam/v4l2_base.h
+        DESTINATION ${INCLUDE_INSTALL_DIR}/libindi/webcam COMPONENT Devel)
+    
+    install(FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/webcam/v4l2_decode/v4l2_decode.h
+        DESTINATION ${INCLUDE_INSTALL_DIR}/libindi/v4l2_decode COMPONENT Devel)
 
     # For DBK21 camera
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/drivers/video/80-dbk21-camera.rules DESTINATION ${UDEVRULES_INSTALL_DIR})
