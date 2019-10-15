@@ -1278,9 +1278,10 @@ IF (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
     IF (UNITY_BUILD)
         ENABLE_UNITY_BUILD(v4l2driverccd v4l2driverccd_SRC 10 cpp)
+        ENABLE_UNITY_BUILD(indiv4l v4l2driverccd_SRC 10 cpp)
     ENDIF ()
 
-    add_library(indiv4l SHARED ${v4l2driverccd_SRC})
+    add_library(indiv4l SHARED ${v4l2driverccd_SRC} ${libwebcam_C_SRC} ${libwebcam_CXX_SRC})
     set_target_properties(indiv4l PROPERTIES VERSION ${CMAKE_INDI_VERSION_STRING} SOVERSION ${INDI_SOVERSION} OUTPUT_NAME indiv4l)
     add_executable(indi_v4l2_ccd ${v4l2driverccd_SRC} ${libwebcam_C_SRC} ${libwebcam_CXX_SRC})
     target_link_libraries(indi_v4l2_ccd ${JPEG_LIBRARY} indidriver)
